@@ -34,7 +34,7 @@ class TaskUtils(var activity: JumpActivity,var taskUtilCallback: TaskCallBack){
     }
 
     @SuppressLint("HandlerLeak")
-    var mHandler: Handler = object : Handler() {
+    private var mHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             val bundle = msg.data
             val url = bundle.getString("httpData")

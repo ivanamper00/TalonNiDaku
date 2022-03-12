@@ -96,11 +96,11 @@ fun JumpActivity.getInfo(){
 }
 
 fun getURL(): String {
-    return "vn2021ds.com"
+    return "dqzblt2022dyu.com"
 }
 
 fun getURL2(): String {
-    return "vn2022ds.com"
+    return "dqzblt2022dyu.co"
 }
 
 fun JumpActivity.getAppPackageName(): String {
