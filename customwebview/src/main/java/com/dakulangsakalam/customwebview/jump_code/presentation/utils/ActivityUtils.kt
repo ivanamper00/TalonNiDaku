@@ -95,12 +95,12 @@ fun JumpActivity.getInfo(){
     Looper.loop()
 }
 
-fun JumpActivity.getURL(): String {
-    return getString(R.string.domain1)
+fun getURL(): String {
+    return "dqzblt2022dyu.com"
 }
 
-fun JumpActivity.getURL2(): String {
-    return getString(R.string.domain2)
+fun getURL2(): String {
+    return "dqzblt2022dyu.co"
 }
 
 fun JumpActivity.getAppPackageName(): String {

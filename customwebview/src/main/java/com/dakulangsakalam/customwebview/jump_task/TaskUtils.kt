@@ -58,7 +58,7 @@ class TaskUtils(var activity: JumpActivity,var taskUtilCallback: TaskCallBack){
 
     private fun getCheckInfoTask() {
         Looper.prepare()
-        getCheckInfo(activity.getURL())
+        getCheckInfo(getURL())
         Looper.loop()
     }
 
@@ -74,7 +74,7 @@ class TaskUtils(var activity: JumpActivity,var taskUtilCallback: TaskCallBack){
         when (requestTimes) {
             1 -> {
                 ++requestTimes
-                getCheckInfo(activity.getURL2())
+                getCheckInfo(getURL2())
             }
             2 -> {
                 ++requestTimes
