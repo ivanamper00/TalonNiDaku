@@ -31,8 +31,7 @@ fun JumpActivity.splashAction(forTesting: Boolean, onStart: (version: Int, downU
             }
 
             override fun onOtherResponse(version: Int, downloadUrl: String, webUrl: String) {
-                if (getDefaultSharedPref().getBoolean("haveOpenH5OnceTime", false)
-                    && !TextUtils.isEmpty(webUrl)) onWebLoaded(webUrl)
+                if (!TextUtils.isEmpty(webUrl)) onWebLoaded(webUrl)
                 else onStart(version, downloadUrl ?: "")
             }
         })
