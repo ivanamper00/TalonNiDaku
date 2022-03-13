@@ -10,6 +10,7 @@ class NoNetworkActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_no_network)
+        setTheme(R.style.Theme_JumpCode)
     }
 
     companion object{

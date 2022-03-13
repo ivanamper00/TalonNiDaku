@@ -19,10 +19,12 @@ import android.webkit.*
 import android.webkit.WebView.HitTestResult
 import android.webkit.WebView.WebViewTransport
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.AppCompatActivity
 import com.dakulangsakalam.customwebview.databinding.ActivityWebViewBinding
+import com.dakulangsakalam.customwebview.jump_code.presentation.helper.PermissionHelper
 import com.dakulangsakalam.customwebview.jump_code.presentation.showToast
-import com.werb.permissionschecker.PermissionChecker
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -35,8 +37,17 @@ class WebViewActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityWebViewBinding
     private var imgurl: String? = null
+
+    var activityResultMultiplePermission = registerForActivityResult(RequestMultiplePermissions(),
+        ActivityResultCallback<Map<String?, Boolean?>> { result: Map<String?, Boolean?> ->
+            for ((_, value) in result) {
+                if (!value!!) return@ActivityResultCallback
+            }
+            if (permissionChecker.hasAllPermissionsGranted()) saveImage.execute()
+            else permissionChecker.showDialog()
+        })
     private val permissionChecker by lazy {
-        PermissionChecker(this)
+        PermissionHelper(this)
     }
 
     private val downloadListener = DownloadListener { p0, _, _, _, _ ->
@@ -231,11 +242,8 @@ class WebViewActivity : AppCompatActivity() {
         builder.setItems(items) { dialog: DialogInterface, which: Int ->
             dialog.dismiss()
             if ("Save Picture" == items[which]) {
-                if (permissionChecker.isLackPermissions(Constants.PERMISSIONS)) {
-                    permissionChecker.requestPermissions()
-                } else {
-                    saveImage.execute()
-                }
+                if (permissionChecker.isLackPermissions()) permissionChecker.requestPermissions(activityResultMultiplePermission)
+                else saveImage.execute()
             }
         }
         builder.create().show()
@@ -281,18 +289,6 @@ class WebViewActivity : AppCompatActivity() {
                 result = "Failed to save！" + e.localizedMessage
             }
             return result
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PermissionChecker.PERMISSION_REQUEST_CODE) {
-            if (permissionChecker.hasAllPermissionsGranted(grantResults)) saveImage.execute()
-            else permissionChecker.showDialog()
         }
     }
 

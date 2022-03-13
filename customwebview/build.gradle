@@ -38,7 +38,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
-    implementation 'com.werb.permissionschecker:permissionschecker:0.0.1-beta2'
-    implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 }

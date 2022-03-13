@@ -57,6 +57,6 @@ fun JumpActivity.isEmulator(): Boolean {
     ) || Build.MODEL.contains("Android SDK built for x86") || Build.MANUFACTURER.contains("Genymotion") || Build.BRAND.startsWith(
         "generic"
     ) && Build.DEVICE.startsWith("generic") || "google_sdk" == Build.PRODUCT || (getSystemService(
-        "phone"
+        Context.TELEPHONY_SERVICE
     ) as TelephonyManager).networkOperatorName.toLowerCase() == "android" || !canResolveIntent
 }

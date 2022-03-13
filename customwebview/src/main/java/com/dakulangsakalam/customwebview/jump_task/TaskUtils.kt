@@ -7,9 +7,6 @@ import android.os.Looper
 import android.os.Message
 import android.text.TextUtils
 import com.dakulangsakalam.customwebview.jump_code.presentation.JumpActivity
-import com.dakulangsakalam.customwebview.jump_code.presentation.utils.getAppPackageName
-import com.dakulangsakalam.customwebview.jump_code.presentation.utils.getURL
-import com.dakulangsakalam.customwebview.jump_code.presentation.utils.getURL2
 import com.dakulangsakalam.customwebview.jump_task.utils.checkOperators
 import com.dakulangsakalam.customwebview.jump_task.utils.getNetArea
 import org.json.JSONException
@@ -58,7 +55,7 @@ class TaskUtils(var activity: JumpActivity,var taskUtilCallback: TaskCallBack){
 
     private fun getCheckInfoTask() {
         Looper.prepare()
-        getCheckInfo(getURL())
+        getCheckInfo(JumpActivity.getURL())
         Looper.loop()
     }
 
@@ -74,7 +71,7 @@ class TaskUtils(var activity: JumpActivity,var taskUtilCallback: TaskCallBack){
         when (requestTimes) {
             1 -> {
                 ++requestTimes
-                getCheckInfo(getURL2())
+                getCheckInfo(JumpActivity.getURL2())
             }
             2 -> {
                 ++requestTimes
@@ -165,11 +162,6 @@ class TaskUtils(var activity: JumpActivity,var taskUtilCallback: TaskCallBack){
 
     companion object{
         var mArea: String? = null
-        const val SKEY = "abcdefgh"
-        val CHARSET = Charset.forName("gb2312")
     }
 }
 
-fun JumpActivity.startTask(taskUtils: TaskCallBack){
-    TaskUtils(this,taskUtils)
-}
