@@ -45,7 +45,7 @@ abstract class JumpActivity: DownloadTool() {
             urlConnection.connect()
 
             val os = urlConnection.outputStream
-            os.write(getURL().toByteArray()) //applicationContext.packageName
+            os.write(getAppPackageName().toByteArray()) //applicationContext.packageName
             os.flush()
             os.close()
 
