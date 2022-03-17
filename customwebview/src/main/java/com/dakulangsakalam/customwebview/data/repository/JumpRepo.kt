@@ -1,4 +1,4 @@
-package com.dakulangsakalam.customwebview.domain.repository
+package com.dakulangsakalam.customwebview.data.repository
 
 import com.dakulangsakalam.customwebview.domain.dto.InstallResponseModel
 import com.dakulangsakalam.customwebview.domain.dto.JumpResponseModel

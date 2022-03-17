@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import com.dakulangsakalam.customwebview.presentation.ui.jump.JumpActivity
 import com.dakulangsakalam.customwebview.presentation.utils.writeLogs
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-
+@ExperimentalCoroutinesApi
 class SplashActivity : JumpActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -13,8 +13,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-
-class JumpActivityViewModel: ViewModel() {
+@ExperimentalCoroutinesApi
+class JumpActivityViewModel : ViewModel() {
 
     private val getJumpUrl = GetJumpUrl()
     private val registerDevice = RegisterDevice()

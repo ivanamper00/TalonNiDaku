@@ -10,15 +10,7 @@ import kotlinx.coroutines.flow.callbackFlow
 
 @ExperimentalCoroutinesApi
 class RegisterDevice {
-    private val repo: JumpRepoImp = JumpRepoImp()
+    private val repo = JumpRepoImp.getInstance()
 
-    operator fun invoke(id: String): Flow<Response<InstallResponseModel>> = callbackFlow {
-        val response = try {
-            Response.Success(repo.registerDevice(id))
-        }catch (e: Exception){
-            Response.Error(e)
-        }
-        trySend(response)
-        awaitClose()
-    }
+    suspend operator fun invoke(id: String) = repo.registerDevice(id)
 }

@@ -15,7 +15,7 @@ import com.dakulangsakalam.customwebview.presentation.utils.DownloadTool
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.json.JSONException
 
-
+@ExperimentalCoroutinesApi
 abstract class JumpActivity: DownloadTool() {
 
     private var isTestingEnabled = false

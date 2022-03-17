@@ -1,6 +1,6 @@
 package com.dakulangsakalam.customwebview.presentation.helper
 
-import com.dakulangsakalam.customwebview.domain.repository.JumpRepo
+import com.dakulangsakalam.customwebview.data.repository.JumpRepo
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
