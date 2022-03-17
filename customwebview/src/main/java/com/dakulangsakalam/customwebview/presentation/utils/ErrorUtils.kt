@@ -1,4 +1,4 @@
-package com.dakulangsakalam.customwebview.jump_code.presentation.utils
+package com.dakulangsakalam.customwebview.presentation.utils
 
 import android.util.Log
 

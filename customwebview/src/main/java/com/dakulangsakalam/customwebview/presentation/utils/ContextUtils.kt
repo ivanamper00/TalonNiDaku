@@ -1,4 +1,4 @@
-package com.dakulangsakalam.customwebview.jump_code.presentation
+package com.dakulangsakalam.customwebview.presentation
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,8 +8,10 @@ import android.net.NetworkInfo
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import com.dakulangsakalam.customwebview.jump_code.presentation.helper.SharedPrefHelper
-import com.dakulangsakalam.customwebview.jump_code.presentation.utils.writeLogs
+import androidx.preference.PreferenceManager
+import com.dakulangsakalam.customwebview.presentation.helper.SharedPrefHelper
+import com.dakulangsakalam.customwebview.presentation.ui.jump.JumpActivity
+import com.dakulangsakalam.customwebview.presentation.utils.writeLogs
 
 fun Context.isNetworkConnected() : Boolean {
     val connectivityManager =
@@ -44,11 +46,11 @@ fun Context.showToast(message: String){
 }
 
 fun JumpActivity.getAppIsRegistered(): Boolean {
-    writeLogs("haveInstallAddOneTimes ${getDefaultSharedPref().getBoolean("haveInstallAddOneTimes",false)}")
+    writeLogs("Application Registered: ${getDefaultSharedPref().getBoolean("haveInstallAddOneTimes",false)}")
     return getDefaultSharedPref().getBoolean("haveInstallAddOneTimes",false)
 }
 
-fun JumpActivity.getDefaultSharedPref(): SharedPreferences{
+fun JumpActivity.getDefaultSharedPref(): SharedPreferences {
     return SharedPrefHelper.getInstance(this).sharedPreferences
 }
 

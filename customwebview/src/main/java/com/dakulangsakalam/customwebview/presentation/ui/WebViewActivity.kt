@@ -1,4 +1,4 @@
-package com.dakulangsakalam.customwebview.jump_code.presentation.utils
+package com.dakulangsakalam.customwebview.presentation.ui
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -23,8 +23,8 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.AppCompatActivity
 import com.dakulangsakalam.customwebview.databinding.ActivityWebViewBinding
-import com.dakulangsakalam.customwebview.jump_code.presentation.helper.PermissionHelper
-import com.dakulangsakalam.customwebview.jump_code.presentation.showToast
+import com.dakulangsakalam.customwebview.presentation.helper.PermissionHelper
+import com.dakulangsakalam.customwebview.presentation.showToast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream

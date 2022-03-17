@@ -1,4 +1,4 @@
-package com.dakulangsakalam.customwebview.jump_code.presentation
+package com.dakulangsakalam.customwebview.presentation.ui
 
 import android.content.Context
 import android.content.Intent
