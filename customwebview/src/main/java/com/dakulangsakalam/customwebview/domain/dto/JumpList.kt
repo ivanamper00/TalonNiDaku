@@ -1,5 +1,8 @@
 package com.dakulangsakalam.customwebview.domain.dto
 
+import androidx.annotation.Keep
+
+@Keep
 data class JumpList(
     val androidname: String,
     val category: Int,
