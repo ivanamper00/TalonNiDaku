@@ -1,13 +1,12 @@
-package com.dakulangsakalam.customwebview.jump_code.presentation.helper
+package com.dakulangsakalam.customwebview.presentation.helper
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
-import com.dakulangsakalam.customwebview.jump_code.presentation.utils.Constants
+import com.dakulangsakalam.customwebview.presentation.utils.Constants
 
 class PermissionHelper(context: Context): ContextWrapper(context) {
 

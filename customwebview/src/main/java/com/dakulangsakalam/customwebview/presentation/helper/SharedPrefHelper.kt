@@ -1,9 +1,8 @@
-package com.dakulangsakalam.customwebview.jump_code.presentation.helper
+package com.dakulangsakalam.customwebview.presentation.helper
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.SharedPreferences
-import com.dakulangsakalam.customwebview.jump_code.presentation.utils.writeLogs
+import com.dakulangsakalam.customwebview.presentation.utils.writeLogs
 
 class SharedPrefHelper(context: Context): ContextWrapper(context) {
 
