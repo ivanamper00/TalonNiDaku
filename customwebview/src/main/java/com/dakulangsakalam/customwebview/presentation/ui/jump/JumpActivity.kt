@@ -35,7 +35,6 @@ abstract class JumpActivity: DownloadTool() {
                 is JumpEvent.AppInstalledEvent -> registerApplication(event.isInstalled)
                 is JumpEvent.JumpRequestSuccess -> processHandler(event.list)
                 is JumpEvent.JumpRequestError -> processHanderError(event.exception)
-                is JumpEvent.JumpNoNetwork -> noInternetPage()
                 else -> {
                     // no-op
                 }
@@ -47,7 +46,6 @@ abstract class JumpActivity: DownloadTool() {
         when(exception){
             is NullPointerException,
             is JSONException -> onStart(1, "")
-            is IOException -> noInternetPage()
             else -> onfailedRequest()
         }
         writeLogs("processHanderError ${exception.message}")

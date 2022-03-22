@@ -28,12 +28,16 @@ class JumpActivityViewModel : ViewModel() {
                 when(it){
                     is Response.Success -> {
                         writeLogs("Register Device Response: ${Gson().toJson(it.data)}")
-                        _jumpEvent.value =
-                            JumpEvent.AppInstalledEvent(it.data.httpCode == 200)
+                        try{
+                            _jumpEvent.value =
+                                JumpEvent.AppInstalledEvent(it.data.httpCode == 200)
+                        }catch (e: Exception){
+                            _jumpEvent.value = JumpEvent.JumpRequestError(e)
+                        }
+
                     }
                     is Response.Error -> {
-                        _jumpEvent.value = JumpEvent.JumpNoNetwork
-                        writeLogs("registerDevice ${it.exception.message}")
+                        _jumpEvent.value = JumpEvent.JumpRequestError(it.exception)
                     }
                 }
             }

@@ -15,7 +15,7 @@ class SplashActivity : JumpActivity() {
         val timer = object: CountDownTimer(3000, 1000){
             override fun onTick(p0: Long) { }
             override fun onFinish() {
-                splashAction { version, downUrl ->
+                splashAction(true, 2) { version, downUrl ->
                     writeLogs("Version: $version \n Url: $downUrl")
                     startActivity(MainActivity.createIntent(this@SplashActivity))
                 }
