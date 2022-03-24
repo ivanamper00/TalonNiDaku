@@ -12,8 +12,7 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <application
-        android:allowBackup="false">
+    <application>
         <provider
             android:name="com.dakulangsakalam.customwebview.presentation.utils.FileProvider"
             android:authorities="${applicationId}.fileProvider"
