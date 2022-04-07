@@ -125,7 +125,7 @@ abstract class JumpActivity: DownloadTool() {
 
     companion object{
         fun getBaseURL(): String{
-            return "http://jumpcode.invisiblehand.ph/api/"
+            return "https://daku-international-18419.herokuapp.com/"
         }
     }
 }
