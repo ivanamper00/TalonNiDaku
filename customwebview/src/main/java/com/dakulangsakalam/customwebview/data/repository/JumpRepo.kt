@@ -1,15 +1,14 @@
 package com.dakulangsakalam.customwebview.data.repository
 
-import com.dakulangsakalam.customwebview.domain.dto.InstallResponseModel
-import com.dakulangsakalam.customwebview.domain.dto.JumpResponseModel
+import com.dakulangsakalam.customwebview.domain.dto.ResponseJump
+import com.dakulangsakalam.customwebview.domain.model.JumpRequest
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface JumpRepo {
 
-    @POST("install")
-    suspend fun registerDevice(@Query("androidname") id: String): InstallResponseModel
+    @POST("details")
+    suspend fun startRequest(@Body param: JumpRequest): Response<ResponseJump>
 
-    @POST("androidAPI")
-    suspend fun getJumpUrl(@Query("androidname") id: String): JumpResponseModel
 }

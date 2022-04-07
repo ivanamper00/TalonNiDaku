@@ -3,7 +3,7 @@ package com.dakulangsakalam.customwebview.domain.dto
 import androidx.annotation.Keep
 
 @Keep
-data class JumpList(
+data class Response(
     val androidname: String,
     val category: Int,
     val categoryname: String,

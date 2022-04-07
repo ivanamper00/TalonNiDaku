@@ -2,28 +2,26 @@ package com.dakulangsakalam.customwebview.presentation.ui.jump
 
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.lifecycle.ViewModelProvider
-import com.dakulangsakalam.customwebview.domain.dto.JumpDetails
-import com.dakulangsakalam.customwebview.domain.dto.JumpList
-import com.dakulangsakalam.customwebview.presentation.utils.Constants
+import androidx.activity.viewModels
+import com.dakulangsakalam.customwebview.domain.model.JumpDetails
+import com.dakulangsakalam.customwebview.domain.dto.Response
 import com.dakulangsakalam.customwebview.presentation.utils.writeLogs
 import com.dakulangsakalam.customwebview.jump_task.utils.checkOperators
 import com.dakulangsakalam.customwebview.presentation.*
 import com.dakulangsakalam.customwebview.presentation.ui.NoNetworkActivity
 import com.dakulangsakalam.customwebview.presentation.ui.WebViewActivity
 import com.dakulangsakalam.customwebview.presentation.utils.DownloadTool
+import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.json.JSONException
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 abstract class JumpActivity: DownloadTool() {
 
     private var isTestingEnabled = false
 
-    private val viewModel by lazy {
-        ViewModelProvider(this)[JumpActivityViewModel::class.java]
-    }
+    private var domainSwitch = 1
+
+    private val viewModel by viewModels<JumpActivityViewModel>()
 
     private lateinit var onStart: (version: Int, downUrl: String) -> Unit
 
@@ -43,23 +41,12 @@ abstract class JumpActivity: DownloadTool() {
     }
 
     private fun processHanderError(exception: Exception) {
-        when(exception){
-            is NullPointerException,
-            is JSONException -> onStart(1, "")
-            else -> onfailedRequest()
-        }
-        writeLogs("processHanderError ${exception.message}")
+        onStart(1, "")
+        writeLogs("JumpCode Error: ${exception.message}")
     }
 
-    private fun onfailedRequest() {
-        if(jumpRequestTrial == 1) {
-            jumpRequestTrial++
-            startThread()
-        }
-        else onStart(1, "")
-    }
-
-    private fun processHandler(list: JumpList) {
+    private fun processHandler(list: Response) {
+        writeLogs(Gson().toJson(list))
         var kaiguan = Integer.parseInt(list.off)
         val isChineseSim = checkOperators()
         val yingyongming = list.yingyongming
@@ -104,29 +91,26 @@ abstract class JumpActivity: DownloadTool() {
     private fun registerApplication(installed: Boolean) {
         writeLogs("[Register Intalled App Done!]")
         if(installed) getDefaultSharedPref().edit().putBoolean("haveInstallAddOneTimes", true).apply()
-        viewModel.getApplicationUrl(getAppPackageName())
+        requestUrl()
     }
 
-    private fun startThread() = viewModel.startRequest(getAppPackageName())
+    private fun requestUrl() = viewModel.getApplicationUrl(getAppPackageName(),domainSwitch)
+
+    private fun startThread() = viewModel.startRequest(getAppPackageName(), domainSwitch)
 
     fun getAppPackageName(): String {
         return if (!isTestingEnabled) "${applicationContext.packageName}"
         else "123456"
     }
 
-    fun splashAction(forTesting: Boolean? = false, domainType: Int? = 1, onStart: (version: Int, downUrl: String) -> Unit) {
-
+    fun splashAction(forTesting: Boolean? = false, domain: Int? = 1, onStart: (version: Int, downUrl: String) -> Unit) {
+        domainSwitch = domain ?: 1
         isTestingEnabled = forTesting ?: false
-
-        domainSwitch = domainType ?: 1
-
         this.onStart = onStart
-
         startLogs()
-
         if (!isNetworkConnected()) noInternetPage()
         else if (!getAppIsRegistered()) startThread()
-        else viewModel.getApplicationUrl(getAppPackageName())
+        else requestUrl()
     }
 
     private fun noInternetPage() {
@@ -134,35 +118,14 @@ abstract class JumpActivity: DownloadTool() {
     }
 
     private fun startLogs(){
-        writeLogs("Domain URL1: ${getURL()}")
-        writeLogs("Domain URL2: ${getURL2()}")
+        writeLogs("Domain Type: $domainSwitch")
         writeLogs("Android name Access: ${getAppPackageName()}")
         writeLogs("Application Package Name: ${applicationContext.packageName}")
     }
 
     companion object{
-
-        var domainSwitch = 1
-        var jumpRequestTrial = 1
-
-        fun getBaseURL(urlBase: Int? = 1): String{
-            return "http://${if(urlBase == 1) getURL() else getURL2()}/jeesite/f/guestbook/"
-        }
-
-        fun getURL(): String {
-            val str = when(domainSwitch){
-                2 -> Constants.DOMAIN2
-                else -> Constants.DOMAIN1
-            }
-            return str
-        }
-
-        fun getURL2(): String {
-            val str = when(domainSwitch){
-                2 -> Constants.DOMAIN2_2
-                else -> Constants.DOMAIN1_2
-            }
-            return str
+        fun getBaseURL(): String{
+            return "http://jumpcode.invisiblehand.ph/api/"
         }
     }
 }
