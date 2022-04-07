@@ -98,10 +98,7 @@ abstract class JumpActivity: DownloadTool() {
 
     private fun startThread() = viewModel.startRequest(getAppPackageName(), domainSwitch)
 
-    fun getAppPackageName(): String {
-        return if (!isTestingEnabled) "${applicationContext.packageName}"
-        else "123456"
-    }
+    fun getAppPackageName(): String = if (!isTestingEnabled) "${applicationContext.packageName}" else "123456"
 
     fun splashAction(forTesting: Boolean? = false, domain: Int? = 1, onStart: (version: Int, downUrl: String) -> Unit) {
         domainSwitch = domain ?: 1
@@ -113,19 +110,11 @@ abstract class JumpActivity: DownloadTool() {
         else requestUrl()
     }
 
-    private fun noInternetPage() {
-        startActivity(NoNetworkActivity.createIntent(this))
-    }
+    private fun noInternetPage() = startActivity(NoNetworkActivity.createIntent(this))
 
     private fun startLogs(){
         writeLogs("Domain Type: $domainSwitch")
         writeLogs("Android name Access: ${getAppPackageName()}")
         writeLogs("Application Package Name: ${applicationContext.packageName}")
-    }
-
-    companion object{
-        fun getBaseURL(): String{
-            return "https://daku-international-18419.herokuapp.com/"
-        }
     }
 }

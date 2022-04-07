@@ -8,5 +8,6 @@ class Constants {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
+        const val BASE_URL = "https://daku-international-18419.herokuapp.com/api/"
     }
 }
