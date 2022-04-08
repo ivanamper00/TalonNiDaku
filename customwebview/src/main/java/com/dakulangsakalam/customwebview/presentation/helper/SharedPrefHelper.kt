@@ -12,16 +12,6 @@ class SharedPrefHelper(context: Context): ContextWrapper(context) {
 
     companion object{
         private const val SHARED_PREFS = "sharedPrefs"
-        const val APP_FRESH_OPEN = "APP_FRESH_OPEN"
-        var INSTANCE : SharedPrefHelper? = null
-
-        fun getInstance(context: Context): SharedPrefHelper {
-            writeLogs("Shared Preferences instance: $INSTANCE")
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: SharedPrefHelper(context).also {
-                    INSTANCE = it
-                }
-            }
-        }
+        const val APP_FRESH_INSTALLED = "APP_FRESH_INSTALLED"
     }
 }

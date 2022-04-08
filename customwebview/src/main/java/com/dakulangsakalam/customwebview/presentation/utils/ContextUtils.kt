@@ -45,13 +45,5 @@ fun Context.showToast(message: String){
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 
-fun JumpActivity.getAppIsRegistered(): Boolean {
-    writeLogs("Application Registered: ${getDefaultSharedPref().getBoolean("haveInstallAddOneTimes",false)}")
-    return getDefaultSharedPref().getBoolean("haveInstallAddOneTimes",false)
-}
-
-fun JumpActivity.getDefaultSharedPref(): SharedPreferences {
-    return SharedPrefHelper.getInstance(this).sharedPreferences
-}
 
 

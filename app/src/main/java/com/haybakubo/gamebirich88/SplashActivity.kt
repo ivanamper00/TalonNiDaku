@@ -1,8 +1,8 @@
 package com.haybakubo.gamebirich88
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import com.dakulangsakalam.customwebview.presentation.ui.jump.JumpActivity
+import com.dakulangsakalam.customwebview.presentation.ui.jump.JumpType
 import com.dakulangsakalam.customwebview.presentation.utils.writeLogs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -12,8 +12,8 @@ class SplashActivity : JumpActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        splashAction(true) { version, downUrl ->
-            writeLogs("Version: $version \n Url: $downUrl")
+        splashAction(JumpType.JUMP_TESTING) { version, downUrl ->
+            writeLogs("URL : $downUrl")
             startActivity(MainActivity.createIntent(this@SplashActivity))
         }
     }

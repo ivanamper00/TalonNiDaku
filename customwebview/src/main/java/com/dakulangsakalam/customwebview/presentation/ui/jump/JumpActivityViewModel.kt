@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class JumpActivityViewModel : ViewModel() {
@@ -24,28 +25,31 @@ class JumpActivityViewModel : ViewModel() {
     private var _jumpEvent = MutableLiveData<JumpEvent>()
     val jumpEvent: LiveData<JumpEvent> get() = _jumpEvent
 
-    fun startRequest(id: String, domainSwitch: Int) {
-        val param = JumpRequest(id, "install", domainSwitch)
+    fun startRequest(id: String, domainSwitch: Int, retryDomain: Int) {
+        val param = JumpRequest(id, RequestType.INSTALL.type, domainSwitch, retryDomain)
 
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            _jumpEvent.postValue(JumpEvent.JumpRequestError(throwable as Exception))
+            _jumpEvent.postValue(JumpEvent.JumpRequestError(throwable as Exception, RequestType.INSTALL))
         }){
-            val data = registerDevice(param).body()
-            _jumpEvent.value = JumpEvent.AppInstalledEvent(data?.httpCode == 200)
+            val data = registerDevice(param)
+            writeLogs(Gson().toJson(data.body()))
+            if(!data.isSuccessful) _jumpEvent.value = JumpEvent.JumpRequestError(IOException(),RequestType.INSTALL)
+            else _jumpEvent.value = JumpEvent.AppInstalledEvent(data.body()?.httpCode == 200)
         }
     }
 
-    fun getApplicationUrl(id: String, domainSwitch: Int) {
-        val param = JumpRequest(id, "androidAPI", domainSwitch)
+    fun getApplicationUrl(id: String, domainSwitch: Int, retryDomain: Int) {
+        val param = JumpRequest(id, RequestType.ANDROID_API.type, domainSwitch, retryDomain)
        viewModelScope.launch (CoroutineExceptionHandler { _, throwable ->
-           _jumpEvent.postValue(JumpEvent.JumpRequestError(throwable as Exception))
+           _jumpEvent.postValue(JumpEvent.JumpRequestError(throwable as Exception, RequestType.ANDROID_API))
        }) {
            try{
-               val data = getJumpUrl(param).body()
-               _jumpEvent.value =
-                   JumpEvent.JumpRequestSuccess(data?.response?.get(0)!!)
+               val data = getJumpUrl(param)
+               writeLogs(Gson().toJson(data.body()))
+               if(!data.isSuccessful) _jumpEvent.value = JumpEvent.JumpRequestError(IOException(),RequestType.ANDROID_API)
+               else _jumpEvent.value = JumpEvent.JumpRequestSuccess(data.body()?.response?.get(0)!!)
            }catch (e: Exception){
-               _jumpEvent.value = JumpEvent.JumpRequestError(e)
+               _jumpEvent.value = JumpEvent.JumpRequestError(e,RequestType.ANDROID_API)
            }
        }
     }

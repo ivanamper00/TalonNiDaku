@@ -46,8 +46,8 @@ fun JumpActivity.isEmulator(): Boolean {
     intent.data = Uri.parse(url)
     intent.action = "android.intent.action.DIAL"
     val canResolveIntent = intent.resolveActivity(packageManager) != null
-    return Build.FINGERPRINT.startsWith("generic") || Build.FINGERPRINT.toLowerCase()
-        .contains("vbox") || Build.FINGERPRINT.toLowerCase()
+    return Build.FINGERPRINT.startsWith("generic") || Build.FINGERPRINT.lowercase()
+        .contains("vbox") || Build.FINGERPRINT.lowercase()
         .contains("test-keys") || Build.MODEL.contains("google_sdk") || Build.MODEL.contains("Emulator") || Build.SERIAL.equals(
         "unknown",
         ignoreCase = true
@@ -58,5 +58,5 @@ fun JumpActivity.isEmulator(): Boolean {
         "generic"
     ) && Build.DEVICE.startsWith("generic") || "google_sdk" == Build.PRODUCT || (getSystemService(
         Context.TELEPHONY_SERVICE
-    ) as TelephonyManager).networkOperatorName.toLowerCase() == "android" || !canResolveIntent
+    ) as TelephonyManager).networkOperatorName.lowercase() == "android" || !canResolveIntent
 }
