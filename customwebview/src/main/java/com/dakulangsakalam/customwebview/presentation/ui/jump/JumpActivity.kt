@@ -10,7 +10,7 @@ import com.dakulangsakalam.customwebview.jump_task.utils.checkOperators
 import com.dakulangsakalam.customwebview.presentation.*
 import com.dakulangsakalam.customwebview.presentation.helper.SharedPrefHelper
 import com.dakulangsakalam.customwebview.presentation.ui.NoNetworkActivity
-import com.dakulangsakalam.customwebview.presentation.ui.WebViewActivity
+import com.dakulangsakalam.customwebview.presentation.ui.jump.webview.WebViewActivity
 import com.dakulangsakalam.customwebview.presentation.utils.DownloadTool
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.NullPointerException

@@ -24,7 +24,7 @@
         </provider>
 
         <activity
-            android:name="com.dakulangsakalam.customwebview.presentation.ui.WebViewActivity"
+            android:name="com.dakulangsakalam.customwebview.presentation.ui.jump.webview.WebViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>

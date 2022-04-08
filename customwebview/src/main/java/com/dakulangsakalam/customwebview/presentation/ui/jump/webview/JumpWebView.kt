@@ -1,4 +1,4 @@
-package com.dakulangsakalam.customwebview.presentation.ui
+package com.dakulangsakalam.customwebview.presentation.ui.jump.webview
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -9,36 +9,47 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.net.http.SslError
 import android.os.AsyncTask
-import android.os.Bundle
 import android.os.Environment
 import android.os.Message
+import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.*
-import android.webkit.WebView.HitTestResult
-import android.webkit.WebView.WebViewTransport
+import android.widget.AbsoluteLayout
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.dakulangsakalam.customwebview.databinding.ActivityWebViewBinding
+import com.dakulangsakalam.customwebview.R
+import com.dakulangsakalam.customwebview.databinding.CustomJumpWebViewBinding
 import com.dakulangsakalam.customwebview.presentation.helper.PermissionHelper
-import com.dakulangsakalam.customwebview.presentation.showToast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.system.exitProcess
 
-class WebViewActivity : AppCompatActivity() {
+class JumpWebView(context: Context, attrs: AttributeSet): WebView(context,attrs) {
 
-    lateinit var binding : ActivityWebViewBinding
-    private var imgurl: String? = null
+    private val binding: CustomJumpWebViewBinding =
+        CustomJumpWebViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    var activityResultMultiplePermission = registerForActivityResult(RequestMultiplePermissions(),
+    private val permissionChecker by lazy {
+        PermissionHelper(context)
+    }
+
+    private val downloadListener = DownloadListener { p0, _, _, _, _ ->
+        val uri = Uri.parse(p0)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        context.startActivity(intent)
+    }
+
+    var activityResultMultiplePermission = (context as AppCompatActivity).registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
         ActivityResultCallback<Map<String?, Boolean?>> { result: Map<String?, Boolean?> ->
             for ((_, value) in result) {
                 if (!value!!) return@ActivityResultCallback
@@ -46,28 +57,17 @@ class WebViewActivity : AppCompatActivity() {
             if (permissionChecker.hasAllPermissionsGranted()) saveImage.execute()
             else permissionChecker.showDialog()
         })
-    private val permissionChecker by lazy {
-        PermissionHelper(this)
-    }
 
-    private val downloadListener = DownloadListener { p0, _, _, _, _ ->
-        val uri = Uri.parse(p0)
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        startActivity(intent)
-    }
+    private var imgurl: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val inflater = LayoutInflater.from(this)
-        binding = ActivityWebViewBinding.inflate(inflater, null, false)
-        setContentView(binding.root)
 
-        initData()
-        initListener()
+
+    init {
+        init(attrs)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    fun initData() {
+    private fun init(attrs: AttributeSet) {
 
         with(binding.wvContent){
             with(settings){
@@ -92,7 +92,9 @@ class WebViewActivity : AppCompatActivity() {
 
         val webseting: WebSettings = binding.wvContent.settings
         with(webseting){
-            val appCacheDir = this@WebViewActivity.applicationContext.getDir("cache", MODE_PRIVATE).path
+            val appCacheDir = context.getDir("cache",
+                AppCompatActivity.MODE_PRIVATE
+            ).path
             domStorageEnabled = true
             setAppCacheMaxSize((1024 * 1024 * 8).toLong())
             setAppCachePath(appCacheDir)
@@ -115,8 +117,8 @@ class WebViewActivity : AppCompatActivity() {
                 isUserGesture: Boolean,
                 resultMsg: Message
             ): Boolean {
-                val newWebView = WebView(this@WebViewActivity)
-                val transport = resultMsg.obj as WebViewTransport
+                val newWebView = WebView(context)
+                val transport = resultMsg.obj as WebView.WebViewTransport
                 transport.webView = newWebView
                 resultMsg.sendToTarget()
                 newWebView.webViewClient = object : WebViewClient() {
@@ -128,12 +130,7 @@ class WebViewActivity : AppCompatActivity() {
                 return true
             }
         }
-        val url = intent.getStringExtra(URL)
-        binding.wvContent.loadUrl(url ?: "")
-    }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    fun initListener() {
         val settings: WebSettings = binding.wvContent.settings
         settings.javaScriptEnabled = true
         binding.wvContent.setOnLongClickListener { v: View ->
@@ -177,7 +174,7 @@ class WebViewActivity : AppCompatActivity() {
                 handler: SslErrorHandler,
                 error: SslError
             ) {
-                val builder = AlertDialog.Builder(this@WebViewActivity)
+                val builder = AlertDialog.Builder(context)
                 var message = "SSL Certificate error."
                 when (error.primaryError) {
                     SslError.SSL_UNTRUSTED -> message = "The certificate authority is not trusted."
@@ -212,13 +209,13 @@ class WebViewActivity : AppCompatActivity() {
                         send = "https://line.me/R/" + newSplit[0]
                     } // showToast(url);
                     val newInt = Intent(Intent.ACTION_VIEW, Uri.parse(send))
-                    startActivity(newInt)
+                    context.startActivity(newInt)
                 } else {
                     try {
                         val `in` = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        startActivity(`in`)
+                        context.startActivity(`in`)
                     } catch (e: Exception) {
-                        showToast("Jump failed")
+                        Toast.makeText(context, "Jump failed", Toast.LENGTH_SHORT).show()
                     }
                 }
                 return true
@@ -238,7 +235,7 @@ class WebViewActivity : AppCompatActivity() {
 
     private fun dialogList() {
         val items = arrayOf("Save Picture", "Cancel")
-        val builder = AlertDialog.Builder(this, 3)
+        val builder = AlertDialog.Builder(context, 3)
         builder.setItems(items) { dialog: DialogInterface, which: Int ->
             dialog.dismiss()
             if ("Save Picture" == items[which]) {
@@ -249,11 +246,10 @@ class WebViewActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-
     @SuppressLint("StaticFieldLeak")
-    private val saveImage = object: AsyncTask<String?, Void?, String>() {
+    private val saveImage =  object: AsyncTask<String?, Void?, String>() {
         override fun onPostExecute(result: String) {
-            showToast(result)
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
         }
 
         override fun doInBackground(vararg p0: String?): String {
@@ -292,34 +288,19 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
-            if (binding.wvContent.canGoBack()) {
-                binding.wvContent.goBack()
-            } else {
-                if (System.currentTimeMillis() - exitTime > 2000) {
-                    Toast.makeText(applicationContext, "Press again to exit the program", Toast.LENGTH_SHORT).show()
-                    exitTime = System.currentTimeMillis()
-                } else {
-                    finish()
-                    exitProcess(0)
-                }
-            }
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
+    override fun canGoBack(): Boolean {
+       return binding.wvContent.canGoBack()
     }
 
-    companion object{
-        var exitTime: Long = 0
-        const val URL = "url"
-
-        fun createIntent(context: Context): Intent = Intent(context, WebViewActivity::class.java)
-        fun createIntent(context: Context, url: String): Intent {
-            val intent = Intent(context, WebViewActivity::class.java)
-            intent.putExtra(URL, url);
-            return intent
-        }
+    override fun goBack() {
+        binding.wvContent.goBack()
     }
 
+    override fun loadUrl(url: String) {
+        binding.wvContent.loadUrl(url)
+    }
+
+    override fun loadUrl(url: String, additionalHttpHeaders: MutableMap<String, String>) {
+        binding.wvContent.loadUrl(url, additionalHttpHeaders)
+    }
 }
