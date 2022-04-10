@@ -1,5 +1,6 @@
 package com.dakulangsakalam.customwebview.domain.model
 
+import androidx.annotation.Keep
 import java.lang.Exception
 
 sealed class Response<out T> {

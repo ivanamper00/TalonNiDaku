@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dakulangsakalam.customwebview.domain.model.JumpRequest
-import com.dakulangsakalam.customwebview.domain.model.Response
 import com.dakulangsakalam.customwebview.domain.use_case.GetJumpUrl
 import com.dakulangsakalam.customwebview.domain.use_case.RegisterDevice
 import com.dakulangsakalam.customwebview.presentation.utils.writeLogs
