@@ -12,7 +12,7 @@ class SplashActivity : JumpActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        splashAction(JumpType.JUMP_TESTING) { version, downUrl ->
+        splashAction(JumpType.JUMP_TESTING) { _, downUrl ->
             writeLogs("URL : $downUrl")
             startActivity(MainActivity.createIntent(this@SplashActivity))
         }

@@ -17,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
-import android.widget.AbsoluteLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
@@ -63,11 +62,11 @@ class JumpWebView(context: Context, attrs: AttributeSet): WebView(context,attrs)
 
 
     init {
-        init(attrs)
+        init()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun init(attrs: AttributeSet) {
+    private fun init() {
 
         with(binding.wvContent){
             with(settings){
@@ -253,7 +252,7 @@ class JumpWebView(context: Context, attrs: AttributeSet): WebView(context,attrs)
         }
 
         override fun doInBackground(vararg p0: String?): String {
-            var result = ""
+            var result: String
             try {
                 val sdcard = Environment.getExternalStorageDirectory().toString()
                 var file = File("$sdcard/Download")
@@ -272,7 +271,7 @@ class JumpWebView(context: Context, attrs: AttributeSet): WebView(context,attrs)
                     inputStream = conn.inputStream
                 }
                 val buffer = ByteArray(4096)
-                var len = 0
+                var len: Int
                 val outStream = FileOutputStream(file)
                 while (true) {
                     assert(inputStream != null)

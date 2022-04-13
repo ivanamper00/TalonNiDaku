@@ -8,7 +8,6 @@ import android.telephony.TelephonyManager
 import com.dakulangsakalam.customwebview.presentation.ui.jump.JumpActivity
 
 fun JumpActivity.checkOperators() : Boolean {
-    val b = false
     val simOperator: String? = (this.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).simOperator
     var b2 = false
     if (simOperator != null) {

@@ -28,8 +28,8 @@ class PermissionHelper(context: Context): ContextWrapper(context) {
     }
 
     fun showDialog() {
-        val dialog = AlertDialog.Builder(this)
-        dialog.setTitle("Permission Needed")
+        val permissionDialog = AlertDialog.Builder(this)
+        permissionDialog.setTitle("Permission Needed")
             .setMessage("Some permission needed to proceed. Please allow permission needed.")
             .setPositiveButton("OK"){
                 dialog, _ ->
@@ -41,6 +41,6 @@ class PermissionHelper(context: Context): ContextWrapper(context) {
                 dialog.dismiss()
             }.create()
 
-        dialog.show()
+        permissionDialog.show()
     }
 }
